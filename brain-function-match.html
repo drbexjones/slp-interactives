@@ -1,0 +1,314 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Brain Structures and SLP Functions</title>
+
+<style>
+body{
+  font-family: Arial, sans-serif;
+  background:#f4f7f9;
+  margin:0;
+  padding:20px;
+  color:#1f2933;
+}
+.container{
+  max-width:1200px;
+  margin:auto;
+}
+h1{
+  color:#084a28;
+  text-align:center;
+}
+.instructions,.feedback,.clinical-note{
+  background:white;
+  padding:18px;
+  border-radius:12px;
+  margin-bottom:20px;
+  box-shadow:0 2px 8px rgba(0,0,0,.08);
+}
+.bank{
+  display:flex;
+  flex-wrap:wrap;
+  gap:10px;
+  justify-content:center;
+  margin-bottom:25px;
+}
+.draggable{
+  background:#084a28;
+  color:white;
+  padding:10px 14px;
+  border-radius:8px;
+  cursor:grab;
+  user-select:none;
+  border:2px solid #084a28;
+}
+.draggable.selected{
+  background:#f4c430;
+  color:#084a28;
+}
+.match-grid{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:14px;
+}
+.card{
+  background:white;
+  border-radius:12px;
+  padding:15px;
+  box-shadow:0 2px 8px rgba(0,0,0,.08);
+}
+.function{
+  font-weight:bold;
+  margin-bottom:10px;
+}
+.dropzone{
+  border:2px dashed #9aa5b1;
+  min-height:52px;
+  border-radius:8px;
+  padding:10px;
+  display:flex;
+  align-items:center;
+}
+.correct{border:3px solid #2ecc71 !important;}
+.incorrect{border:3px solid #e74c3c !important;}
+.controls{
+  text-align:center;
+  margin:25px 0;
+}
+button{
+  background:#084a28;
+  color:white;
+  border:none;
+  padding:12px 18px;
+  margin:5px;
+  border-radius:8px;
+  cursor:pointer;
+  font-size:16px;
+}
+button:hover{opacity:.9;}
+.feedback{display:none;}
+.rationale{
+  font-size:.95em;
+  margin-top:8px;
+  color:#4b5563;
+}
+@media(max-width:800px){
+  .match-grid{grid-template-columns:1fr;}
+}
+</style>
+</head>
+
+<body>
+<div class="container">
+
+<h1>Brain Structures and SLP Functions</h1>
+
+<div class="instructions">
+<p><strong>Directions:</strong> Match each brain structure to the function most relevant to speech-language pathology. Drag the structure into the correct box, or tap a structure and then tap a box.</p>
+</div>
+
+<div class="bank" id="bank">
+  <div class="draggable" draggable="true" id="broca">Broca’s Area</div>
+  <div class="draggable" draggable="true" id="wernicke">Wernicke’s Area</div>
+  <div class="draggable" draggable="true" id="auditory-cortex">Primary Auditory Cortex</div>
+  <div class="draggable" draggable="true" id="motor-cortex">Primary Motor Cortex</div>
+  <div class="draggable" draggable="true" id="brainstem">Brainstem</div>
+  <div class="draggable" draggable="true" id="cerebellum">Cerebellum</div>
+  <div class="draggable" draggable="true" id="hippocampus">Hippocampus</div>
+  <div class="draggable" draggable="true" id="basal-ganglia">Basal Ganglia</div>
+  <div class="draggable" draggable="true" id="prefrontal">Prefrontal Cortex</div>
+  <div class="draggable" draggable="true" id="arcuate">Arcuate Fasciculus</div>
+</div>
+
+<div class="match-grid">
+
+  <div class="card">
+    <div class="function">Supports expressive language planning and speech production.</div>
+    <div class="dropzone" data-answer="Broca’s Area"></div>
+    <div class="rationale">Important for formulating and producing spoken language.</div>
+  </div>
+
+  <div class="card">
+    <div class="function">Supports language comprehension and understanding spoken words.</div>
+    <div class="dropzone" data-answer="Wernicke’s Area"></div>
+    <div class="rationale">Important for receptive language and meaningful interpretation of speech.</div>
+  </div>
+
+  <div class="card">
+    <div class="function">Receives and processes sound information from the auditory pathway.</div>
+    <div class="dropzone" data-answer="Primary Auditory Cortex"></div>
+    <div class="rationale">Relevant for hearing, speech perception, and auditory processing.</div>
+  </div>
+
+  <div class="card">
+    <div class="function">Controls voluntary movement for speech, voice, and oral-motor actions.</div>
+    <div class="dropzone" data-answer="Primary Motor Cortex"></div>
+    <div class="rationale">Involved in motor execution for articulation, phonation, and facial/oral movement.</div>
+  </div>
+
+  <div class="card">
+    <div class="function">Coordinates basic life functions and cranial nerve control for swallowing and airway protection.</div>
+    <div class="dropzone" data-answer="Brainstem"></div>
+    <div class="rationale">Highly relevant for dysphagia, reflexes, respiration, and cranial nerve function.</div>
+  </div>
+
+  <div class="card">
+    <div class="function">Coordinates timing, precision, and smoothness of movement.</div>
+    <div class="dropzone" data-answer="Cerebellum"></div>
+    <div class="rationale">Relevant for motor speech coordination and ataxic dysarthria.</div>
+  </div>
+
+  <div class="card">
+    <div class="function">Supports formation of new memories and learning.</div>
+    <div class="dropzone" data-answer="Hippocampus"></div>
+    <div class="rationale">Relevant for cognition, recall, new learning, and therapy carryover.</div>
+  </div>
+
+  <div class="card">
+    <div class="function">Helps regulate motor initiation, movement control, and procedural learning.</div>
+    <div class="dropzone" data-answer="Basal Ganglia"></div>
+    <div class="rationale">Relevant for Parkinson’s disease, hypokinetic dysarthria, and movement-based disorders.</div>
+  </div>
+
+  <div class="card">
+    <div class="function">Supports attention, planning, inhibition, organization, and problem-solving.</div>
+    <div class="dropzone" data-answer="Prefrontal Cortex"></div>
+    <div class="rationale">Relevant for executive functioning and cognitive-communication disorders.</div>
+  </div>
+
+  <div class="card">
+    <div class="function">Connects language comprehension and expression areas for repetition and integration.</div>
+    <div class="dropzone" data-answer="Arcuate Fasciculus"></div>
+    <div class="rationale">Damage may contribute to conduction aphasia and difficulty repeating spoken language.</div>
+  </div>
+
+</div>
+
+<div class="controls">
+  <button onclick="checkAnswers()">Check Answers</button>
+  <button onclick="resetActivity()">Reset</button>
+  <button onclick="showAnswers()">Show Answers</button>
+</div>
+
+<div class="feedback" id="feedback"></div>
+
+<div class="clinical-note">
+<h3>Clinical Connection</h3>
+<p>SLPs do not diagnose neurological lesions, but they must understand how brain structures support communication, cognition, hearing, swallowing, and motor speech. This helps connect client symptoms to possible underlying systems and supports effective assessment, documentation, referral, and intervention planning.</p>
+</div>
+
+</div>
+
+<script>
+const draggables = document.querySelectorAll('.draggable');
+const dropzones = document.querySelectorAll('.dropzone');
+let selectedItem = null;
+
+draggables.forEach(item => {
+  item.addEventListener('dragstart', e => {
+    e.dataTransfer.setData('text/plain', item.id);
+  });
+
+  item.addEventListener('click', () => {
+    draggables.forEach(d => d.classList.remove('selected'));
+    selectedItem = item;
+    item.classList.add('selected');
+  });
+});
+
+dropzones.forEach(zone => {
+  zone.addEventListener('dragover', e => e.preventDefault());
+
+  zone.addEventListener('drop', e => {
+    e.preventDefault();
+    const id = e.dataTransfer.getData('text/plain');
+    const element = document.getElementById(id);
+    placeItem(zone, element);
+  });
+
+  zone.addEventListener('click', () => {
+    if(selectedItem){
+      placeItem(zone, selectedItem);
+      selectedItem.classList.remove('selected');
+      selectedItem = null;
+    }
+  });
+});
+
+function placeItem(zone, element){
+  if(zone.children.length > 0){
+    document.getElementById('bank').appendChild(zone.children[0]);
+  }
+  zone.appendChild(element);
+  zone.classList.remove('correct','incorrect');
+}
+
+function checkAnswers(){
+  let correct = 0;
+
+  dropzones.forEach(zone => {
+    zone.classList.remove('correct','incorrect');
+
+    if(zone.children.length === 0){
+      zone.classList.add('incorrect');
+      return;
+    }
+
+    const response = zone.children[0].textContent.trim();
+
+    if(response === zone.dataset.answer){
+      zone.classList.add('correct');
+      correct++;
+    } else {
+      zone.classList.add('incorrect');
+    }
+  });
+
+  const feedback = document.getElementById('feedback');
+  feedback.style.display = 'block';
+  feedback.innerHTML = `
+    <h2>Score: ${correct}/${dropzones.length}</h2>
+    <p>${correct === dropzones.length
+      ? 'Excellent. You correctly matched each brain structure to its SLP-related function.'
+      : 'Review the red boxes and try again. Think about what each structure contributes to communication, cognition, hearing, swallowing, or motor speech.'}</p>
+  `;
+}
+
+function resetActivity(){
+  const bank = document.getElementById('bank');
+
+  dropzones.forEach(zone => {
+    zone.classList.remove('correct','incorrect');
+    while(zone.firstChild){
+      bank.appendChild(zone.firstChild);
+    }
+  });
+
+  draggables.forEach(d => d.classList.remove('selected'));
+  selectedItem = null;
+  document.getElementById('feedback').style.display = 'none';
+}
+
+function showAnswers(){
+  dropzones.forEach(zone => {
+    while(zone.firstChild){
+      document.getElementById('bank').appendChild(zone.firstChild);
+    }
+
+    const answer = zone.dataset.answer;
+    const match = [...document.querySelectorAll('.draggable')]
+      .find(item => item.textContent.trim() === answer);
+
+    if(match){
+      zone.appendChild(match);
+      zone.classList.add('correct');
+      zone.classList.remove('incorrect');
+    }
+  });
+}
+</script>
+
+</body>
+</html>
