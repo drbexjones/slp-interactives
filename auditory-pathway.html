@@ -1,0 +1,320 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Auditory Pathway Challenge</title>
+
+<style>
+body{
+    font-family: Arial, sans-serif;
+    background:#f4f7f9;
+    margin:0;
+    padding:20px;
+}
+
+.container{
+    max-width:1200px;
+    margin:auto;
+}
+
+h1{
+    color:#084a28;
+    text-align:center;
+}
+
+.instructions{
+    background:white;
+    padding:15px;
+    border-radius:10px;
+    margin-bottom:20px;
+}
+
+.bank{
+    display:flex;
+    flex-wrap:wrap;
+    gap:10px;
+    margin-bottom:30px;
+    justify-content:center;
+}
+
+.draggable{
+    background:#084a28;
+    color:white;
+    padding:10px 15px;
+    border-radius:8px;
+    cursor:grab;
+    user-select:none;
+}
+
+.dropzone{
+    background:white;
+    border:2px dashed #999;
+    min-height:60px;
+    display:flex;
+    align-items:center;
+    padding:10px;
+    border-radius:8px;
+}
+
+.pathway{
+    display:grid;
+    grid-template-columns:80px 1fr;
+    gap:10px;
+}
+
+.step{
+    display:contents;
+}
+
+.number{
+    background:#084a28;
+    color:white;
+    font-weight:bold;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    border-radius:8px;
+}
+
+.controls{
+    text-align:center;
+    margin-top:25px;
+}
+
+button{
+    background:#084a28;
+    color:white;
+    border:none;
+    padding:12px 20px;
+    margin:5px;
+    border-radius:8px;
+    cursor:pointer;
+}
+
+button:hover{
+    opacity:.9;
+}
+
+.correct{
+    border:3px solid #2ecc71 !important;
+}
+
+.incorrect{
+    border:3px solid #e74c3c !important;
+}
+
+.feedback{
+    margin-top:25px;
+    padding:15px;
+    background:white;
+    border-radius:10px;
+    display:none;
+}
+
+.explanation{
+    margin-top:20px;
+    background:white;
+    padding:15px;
+    border-radius:10px;
+}
+</style>
+</head>
+
+<body>
+
+<div class="container">
+
+<h1>How Does Sound Travel Through the Auditory System?</h1>
+
+<div class="instructions">
+<p><strong>Directions:</strong> Drag each structure into the correct order showing how sound moves from the environment to the brain.</p>
+</div>
+
+<div class="bank" id="bank">
+
+<div class="draggable" draggable="true" id="d1">Auditory Cortex</div>
+<div class="draggable" draggable="true" id="d2">Outer Ear (Pinna)</div>
+<div class="draggable" draggable="true" id="d3">Cochlea</div>
+<div class="draggable" draggable="true" id="d4">Auditory Nerve (CN VIII)</div>
+<div class="draggable" draggable="true" id="d5">Ear Canal</div>
+<div class="draggable" draggable="true" id="d6">Tympanic Membrane</div>
+<div class="draggable" draggable="true" id="d7">Ossicles</div>
+
+</div>
+
+<div class="pathway">
+
+<div class="step">
+<div class="number">1</div>
+<div class="dropzone" data-answer="Outer Ear (Pinna)"></div>
+</div>
+
+<div class="step">
+<div class="number">2</div>
+<div class="dropzone" data-answer="Ear Canal"></div>
+</div>
+
+<div class="step">
+<div class="number">3</div>
+<div class="dropzone" data-answer="Tympanic Membrane"></div>
+</div>
+
+<div class="step">
+<div class="number">4</div>
+<div class="dropzone" data-answer="Ossicles"></div>
+</div>
+
+<div class="step">
+<div class="number">5</div>
+<div class="dropzone" data-answer="Cochlea"></div>
+</div>
+
+<div class="step">
+<div class="number">6</div>
+<div class="dropzone" data-answer="Auditory Nerve (CN VIII)"></div>
+</div>
+
+<div class="step">
+<div class="number">7</div>
+<div class="dropzone" data-answer="Auditory Cortex"></div>
+</div>
+
+</div>
+
+<div class="controls">
+<button onclick="checkAnswers()">Check Answers</button>
+<button onclick="resetActivity()">Reset</button>
+<button onclick="showAnswers()">Show Answers</button>
+</div>
+
+<div class="feedback" id="feedback"></div>
+
+<div class="explanation">
+<h3>Clinical Connection</h3>
+
+<p>
+Speech-language pathologists need to understand the auditory pathway because communication disorders may arise from problems at any point in this system.
+</p>
+
+<ul>
+<li><strong>Outer/Middle Ear:</strong> Conductive hearing loss</li>
+<li><strong>Cochlea:</strong> Sensorineural hearing loss</li>
+<li><strong>Auditory Nerve:</strong> Neural transmission deficits</li>
+<li><strong>Auditory Cortex:</strong> Central auditory processing difficulties</li>
+</ul>
+
+</div>
+
+</div>
+
+<script>
+
+const draggables = document.querySelectorAll('.draggable');
+const dropzones = document.querySelectorAll('.dropzone');
+
+draggables.forEach(item => {
+
+item.addEventListener('dragstart', e=>{
+e.dataTransfer.setData('text/plain', item.id);
+});
+
+});
+
+dropzones.forEach(zone => {
+
+zone.addEventListener('dragover', e=>{
+e.preventDefault();
+});
+
+zone.addEventListener('drop', e=>{
+e.preventDefault();
+
+const id = e.dataTransfer.getData('text/plain');
+const element = document.getElementById(id);
+
+if(zone.children.length===0){
+zone.appendChild(element);
+}
+});
+
+});
+
+function checkAnswers(){
+
+let correct = 0;
+
+dropzones.forEach(zone=>{
+
+zone.classList.remove('correct','incorrect');
+
+if(zone.children.length===0){
+zone.classList.add('incorrect');
+return;
+}
+
+const response = zone.children[0].textContent.trim();
+
+if(response===zone.dataset.answer){
+zone.classList.add('correct');
+correct++;
+}
+else{
+zone.classList.add('incorrect');
+}
+});
+
+const feedback = document.getElementById('feedback');
+feedback.style.display='block';
+
+feedback.innerHTML =
+`<h2>Score: ${correct}/7</h2>
+<p>${correct===7
+? 'Excellent! You correctly identified the entire auditory pathway.'
+: 'Review the highlighted structures and try again.'}</p>`;
+}
+
+function resetActivity(){
+
+const bank = document.getElementById('bank');
+
+dropzones.forEach(zone=>{
+zone.classList.remove('correct','incorrect');
+
+while(zone.firstChild){
+bank.appendChild(zone.firstChild);
+}
+});
+
+document.getElementById('feedback').style.display='none';
+}
+
+function showAnswers(){
+
+const answers = [
+"Outer Ear (Pinna)",
+"Ear Canal",
+"Tympanic Membrane",
+"Ossicles",
+"Cochlea",
+"Auditory Nerve (CN VIII)",
+"Auditory Cortex"
+];
+
+dropzones.forEach((zone,index)=>{
+
+while(zone.firstChild){
+document.getElementById('bank').appendChild(zone.firstChild);
+}
+
+const matching = [...document.querySelectorAll('.draggable')]
+.find(item=>item.textContent.trim()===answers[index]);
+
+zone.appendChild(matching);
+});
+}
+
+</script>
+
+</body>
+</html>
