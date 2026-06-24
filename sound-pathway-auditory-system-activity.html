@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Sound Pathway Through the Auditory System</title>
+<style>
+  :root{
+    --obu-green:#084a28;
+    --obu-gold:#f2b705;
+    --light:#f7faf8;
+    --ink:#1f2933;
+    --muted:#5f6b7a;
+    --correct:#d9f8e6;
+    --incorrect:#ffe1e1;
+    --border:#d5ddd8;
+  }
+  *{box-sizing:border-box}
+  body{font-family:Arial, Helvetica, sans-serif;margin:0;background:#fff;color:var(--ink);line-height:1.45}
+  .wrap{max-width:1100px;margin:0 auto;padding:24px}
+  .hero{background:linear-gradient(135deg,var(--obu-green),#0b6b3c);color:white;border-radius:18px;padding:28px;margin-bottom:20px}
+  .hero h1{margin:0 0 8px;font-size:clamp(1.6rem,3vw,2.4rem)}
+  .hero p{margin:0;max-width:850px;font-size:1.05rem}
+  .panel{border:1px solid var(--border);border-radius:16px;background:var(--light);padding:18px;margin:16px 0}
+  .directions strong{color:var(--obu-green)}
+  .activity{display:grid;grid-template-columns:1fr 1.25fr;gap:18px;align-items:start}
+  @media(max-width:850px){.activity{grid-template-columns:1fr}}
+  .bank,.pathway{background:#fff;border:1px solid var(--border);border-radius:16px;padding:16px;min-height:280px}
+  h2{font-size:1.2rem;margin:0 0 12px;color:var(--obu-green)}
+  .tiles{display:flex;flex-wrap:wrap;gap:10px}
+  .tile{border:2px solid var(--obu-green);background:white;border-radius:999px;padding:10px 14px;cursor:grab;font-weight:700;box-shadow:0 2px 5px rgba(0,0,0,.08);user-select:none}
+  .tile:focus{outline:3px solid var(--obu-gold);outline-offset:2px}
+  .tile.selected{background:var(--obu-gold);border-color:#9d7300;color:#1f2933}
+  .slot{display:grid;grid-template-columns:44px 1fr;gap:10px;align-items:center;border:2px dashed #b8c5bd;border-radius:14px;min-height:62px;padding:10px;margin-bottom:10px;background:#fbfdfc}
+  .slot.dragover{background:#fff8dc;border-color:var(--obu-gold)}
+  .num{width:34px;height:34px;border-radius:50%;background:var(--obu-green);color:#fff;display:flex;align-items:center;justify-content:center;font-weight:700}
+  .dropzone{min-height:38px;display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+  .placeholder{color:var(--muted);font-style:italic}
+  .slot.correct{background:var(--correct);border-color:#2e9f5b}
+  .slot.incorrect{background:var(--incorrect);border-color:#d13b3b}
+  .controls{display:flex;flex-wrap:wrap;gap:10px;margin-top:14px}
+  button{border:0;border-radius:999px;padding:11px 16px;font-weight:700;cursor:pointer;background:var(--obu-green);color:white}
+  button.secondary{background:#e8eee9;color:var(--ink)}
+  button.gold{background:var(--obu-gold);color:#1f2933}
+  button:focus{outline:3px solid var(--obu-gold);outline-offset:2px}
+  .feedback{font-weight:700;margin-top:12px;min-height:26px}
+  .explain{display:none;margin-top:16px;background:#fff;border-left:6px solid var(--obu-green);padding:14px;border-radius:10px}
+  .explain.show{display:block}
+  .explain ol{margin-top:8px}
+  .mini{font-size:.92rem;color:var(--muted)}
+  .sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <section class="hero">
+    <h1>How Sound Moves Through the Auditory System</h1>
+    <p>Arrange the pathway of sound from the environment to the brain. This activity focuses on the major anatomical structures students need to recognize and explain in an SLP anatomy course.</p>
+  </section>
+
+  <section class="panel directions">
+    <p><strong>Task:</strong> Drag each structure into the correct step of the auditory pathway. You can also click a term, then click a numbered slot to place it.</p>
+    <p class="mini">Tip: Think outer ear → middle ear → inner ear → nerve pathway → auditory cortex.</p>
+  </section>
+
+  <main class="activity" aria-label="Auditory pathway drag and drop activity">
+    <section class="bank" aria-labelledby="bank-title">
+      <h2 id="bank-title">Structure Bank</h2>
+      <div id="tiles" class="tiles"></div>
+    </section>
+
+    <section class="pathway" aria-labelledby="pathway-title">
+      <h2 id="pathway-title">Sound Pathway</h2>
+      <div id="slots"></div>
+      <div class="controls">
+        <button onclick="checkAnswers()">Check Answers</button>
+        <button class="gold" onclick="showAnswers()">Show Answers</button>
+        <button class="secondary" onclick="resetActivity()">Reset</button>
+      </div>
+      <div id="feedback" class="feedback" aria-live="polite"></div>
+    </section>
+  </main>
+
+  <section id="explanation" class="explain">
+    <h2>Correct Pathway Explanation</h2>
+    <ol>
+      <li><strong>Pinna/Auricle:</strong> Collects sound waves from the environment.</li>
+      <li><strong>External Auditory Canal:</strong> Funnels sound toward the tympanic membrane.</li>
+      <li><strong>Tympanic Membrane:</strong> Vibrates in response to sound pressure changes.</li>
+      <li><strong>Ossicles:</strong> The malleus, incus, and stapes amplify and transfer vibration through the middle ear.</li>
+      <li><strong>Oval Window:</strong> Receives vibration from the stapes and transfers mechanical energy into the cochlea.</li>
+      <li><strong>Cochlea:</strong> Converts mechanical vibration into fluid movement and stimulates sensory hair cells.</li>
+      <li><strong>Organ of Corti/Hair Cells:</strong> Transduces mechanical movement into neural signals.</li>
+      <li><strong>Auditory Nerve/CN VIII:</strong> Carries auditory information toward the brainstem.</li>
+      <li><strong>Brainstem Auditory Pathway:</strong> Relays and processes auditory information through subcortical structures.</li>
+      <li><strong>Primary Auditory Cortex:</strong> Interprets sound at the cortical level.</li>
+    </ol>
+  </section>
+</div>
+
+<script>
+const correctOrder = [
+  "Pinna/Auricle",
+  "External Auditory Canal",
+  "Tympanic Membrane",
+  "Ossicles",
+  "Oval Window",
+  "Cochlea",
+  "Organ of Corti/Hair Cells",
+  "Auditory Nerve/CN VIII",
+  "Brainstem Auditory Pathway",
+  "Primary Auditory Cortex"
+];
+
+let selectedTile = null;
+const shuffled = [...correctOrder].sort(() => Math.random() - 0.5);
+const tilesContainer = document.getElementById("tiles");
+const slotsContainer = document.getElementById("slots");
+
+function makeTile(label){
+  const tile = document.createElement("div");
+  tile.className = "tile";
+  tile.draggable = true;
+  tile.tabIndex = 0;
+  tile.textContent = label;
+  tile.dataset.value = label;
+  tile.setAttribute("role", "button");
+  tile.setAttribute("aria-label", `Select ${label}`);
+  tile.addEventListener("dragstart", e => e.dataTransfer.setData("text/plain", label));
+  tile.addEventListener("click", () => selectTile(tile));
+  tile.addEventListener("keydown", e => {
+    if(e.key === "Enter" || e.key === " "){
+      e.preventDefault();
+      selectTile(tile);
+    }
+  });
+  return tile;
+}
+
+function selectTile(tile){
+  document.querySelectorAll(".tile").forEach(t => t.classList.remove("selected"));
+  selectedTile = tile;
+  tile.classList.add("selected");
+  document.getElementById("feedback").textContent = `Selected: ${tile.dataset.value}. Now choose a numbered slot.`;
+}
+
+function fillSlot(slot, value){
+  const existing = slot.querySelector(".tile");
+  if(existing) tilesContainer.appendChild(existing);
+  const source = [...document.querySelectorAll(".tile")].find(t => t.dataset.value === value);
+  if(source){
+    slot.querySelector(".dropzone").innerHTML = "";
+    slot.querySelector(".dropzone").appendChild(source);
+    source.classList.remove("selected");
+    selectedTile = null;
+    clearSlotState(slot);
+  }
+}
+
+function clearSlotState(slot){
+  slot.classList.remove("correct","incorrect");
+}
+
+function build(){
+  shuffled.forEach(label => tilesContainer.appendChild(makeTile(label)));
+  correctOrder.forEach((_, index) => {
+    const slot = document.createElement("div");
+    slot.className = "slot";
+    slot.dataset.index = index;
+    slot.tabIndex = 0;
+    slot.innerHTML = `<div class="num">${index+1}</div><div class="dropzone"><span class="placeholder">Drop step ${index+1} here</span></div>`;
+    slot.addEventListener("dragover", e => { e.preventDefault(); slot.classList.add("dragover"); });
+    slot.addEventListener("dragleave", () => slot.classList.remove("dragover"));
+    slot.addEventListener("drop", e => {
+      e.preventDefault();
+      slot.classList.remove("dragover");
+      fillSlot(slot, e.dataTransfer.getData("text/plain"));
+    });
+    slot.addEventListener("click", () => {
+      if(selectedTile) fillSlot(slot, selectedTile.dataset.value);
+    });
+    slot.addEventListener("keydown", e => {
+      if((e.key === "Enter" || e.key === " ") && selectedTile){
+        e.preventDefault();
+        fillSlot(slot, selectedTile.dataset.value);
+      }
+    });
+    slotsContainer.appendChild(slot);
+  });
+}
+
+function checkAnswers(){
+  let correct = 0;
+  document.querySelectorAll(".slot").forEach(slot => {
+    const placed = slot.querySelector(".tile")?.dataset.value;
+    const expected = correctOrder[Number(slot.dataset.index)];
+    slot.classList.remove("correct","incorrect");
+    if(placed === expected){
+      slot.classList.add("correct");
+      correct++;
+    } else {
+      slot.classList.add("incorrect");
+    }
+  });
+  const feedback = document.getElementById("feedback");
+  if(correct === correctOrder.length){
+    feedback.textContent = `Excellent. You placed all ${correctOrder.length} steps correctly.`;
+    document.getElementById("explanation").classList.add("show");
+  } else {
+    feedback.textContent = `${correct} of ${correctOrder.length} correct. Review the red steps and try again.`;
+  }
+}
+
+function showAnswers(){
+  document.querySelectorAll(".slot").forEach((slot, index) => fillSlot(slot, correctOrder[index]));
+  document.querySelectorAll(".slot").forEach(slot => slot.classList.add("correct"));
+  document.getElementById("feedback").textContent = "Correct pathway shown.";
+  document.getElementById("explanation").classList.add("show");
+}
+
+function resetActivity(){
+  document.getElementById("feedback").textContent = "";
+  document.getElementById("explanation").classList.remove("show");
+  document.querySelectorAll(".tile").forEach(tile => tilesContainer.appendChild(tile));
+  document.querySelectorAll(".slot").forEach((slot, index) => {
+    slot.className = "slot";
+    slot.querySelector(".dropzone").innerHTML = `<span class="placeholder">Drop step ${index+1} here</span>`;
+  });
+  selectedTile = null;
+}
+
+build();
+</script>
+</body>
+</html>
