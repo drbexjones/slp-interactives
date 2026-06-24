@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Auditory System Definitions</title>
+
+<style>
+body {
+    font-family: Arial, sans-serif;
+    max-width: 1000px;
+    margin: auto;
+    padding: 30px;
+    background: #f8f9f8;
+    color: #1f2933;
+}
+
+h1 {
+    color: #084a28;
+}
+
+.instructions {
+    background: #e8f3ec;
+    border-left: 6px solid #084a28;
+    padding: 15px;
+    margin-bottom: 25px;
+}
+
+.container {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+}
+
+.card, .dropzone {
+    background: white;
+    border: 2px solid #d6d6d6;
+    border-radius: 10px;
+    padding: 15px;
+    margin-bottom: 12px;
+}
+
+.card {
+    cursor: grab;
+    font-weight: bold;
+}
+
+.dropzone {
+    min-height: 65px;
+}
+
+.dropzone.correct {
+    border-color: #084a28;
+    background: #e8f3ec;
+}
+
+.dropzone.incorrect {
+    border-color: #b91c1c;
+    background: #fde8e8;
+}
+
+button {
+    background: #084a28;
+    color: white;
+    border: none;
+    padding: 12px 18px;
+    border-radius: 8px;
+    font-size: 16px;
+    margin-top: 20px;
+    cursor: pointer;
+}
+
+#feedback {
+    margin-top: 20px;
+    font-weight: bold;
+}
+</style>
+</head>
+
+<body>
+
+<h1>Auditory System Drag-and-Drop Review</h1>
+
+<div class="instructions">
+    <p><strong>Directions:</strong> Drag each auditory system structure to the definition that best matches it. When you are finished, click “Check Answers.”</p>
+</div>
+
+<div class="container">
+
+    <div>
+        <h2>Structures</h2>
+
+        <div class="card" draggable="true" id="outer-ear">Outer Ear</div>
+        <div class="card" draggable="true" id="tympanic-membrane">Tympanic Membrane</div>
+        <div class="card" draggable="true" id="ossicles">Ossicles</div>
+        <div class="card" draggable="true" id="cochlea">Cochlea</div>
+        <div class="card" draggable="true" id="hair-cells">Hair Cells</div>
+        <div class="card" draggable="true" id="auditory-nerve">Auditory Nerve</div>
+        <div class="card" draggable="true" id="semicircular-canals">Semicircular Canals</div>
+    </div>
+
+    <div>
+        <h2>Definitions</h2>
+
+        <div class="dropzone" data-answer="outer-ear">
+            Collects sound waves and helps funnel them toward the ear canal.
+        </div>
+
+        <div class="dropzone" data-answer="tympanic-membrane">
+            Vibrates in response to sound waves and begins mechanical transmission of sound.
+        </div>
+
+        <div class="dropzone" data-answer="ossicles">
+            Three small middle ear bones that amplify and transmit vibrations.
+        </div>
+
+        <div class="dropzone" data-answer="cochlea">
+            Spiral-shaped inner ear structure responsible for hearing.
+        </div>
+
+        <div class="dropzone" data-answer="hair-cells">
+            Sensory receptors that convert mechanical movement into neural signals.
+        </div>
+
+        <div class="dropzone" data-answer="auditory-nerve">
+            Carries sound information from the inner ear to the brain.
+        </div>
+
+        <div class="dropzone" data-answer="semicircular-canals">
+            Inner ear structures involved in balance rather than hearing.
+        </div>
+    </div>
+
+</div>
+
+<button onclick="checkAnswers()">Check Answers</button>
+<button onclick="resetActivity()">Reset</button>
+
+<p id="feedback"></p>
+
+<script>
+let draggedItem = null;
+
+document.querySelectorAll('.card').forEach(card => {
+    card.addEventListener('dragstart', () => {
+        draggedItem = card;
+    });
+});
+
+document.querySelectorAll('.dropzone').forEach(zone => {
+    zone.addEventListener('dragover', event => {
+        event.preventDefault();
+    });
+
+    zone.addEventListener('drop', event => {
+        event.preventDefault();
+
+        if (draggedItem) {
+            zone.appendChild(draggedItem);
+            draggedItem = null;
+        }
+    });
+});
+
+function checkAnswers() {
+    let correct = 0;
+    let total = document.querySelectorAll('.dropzone').length;
+
+    document.querySelectorAll('.dropzone').forEach(zone => {
+        zone.classList.remove('correct', 'incorrect');
+
+        let card = zone.querySelector('.card');
+
+        if (card && card.id === zone.dataset.answer) {
+            zone.classList.add('correct');
+            correct++;
+        } else {
+            zone.classList.add('incorrect');
+        }
+    });
+
+    document.getElementById('feedback').innerText =
+        `You matched ${correct} out of ${total} correctly.`;
+}
+
+function resetActivity() {
+    location.reload();
+}
+</script>
+
+</body>
+</html>
