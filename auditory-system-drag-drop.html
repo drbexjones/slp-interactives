@@ -1,0 +1,481 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Auditory System Anatomy Drag-and-Drop</title>
+  <style>
+    :root {
+      --obu-green: #084a28;
+      --obu-gold: #f2c14e;
+      --ink: #1f2937;
+      --muted: #6b7280;
+      --bg: #f8fafc;
+      --card: #ffffff;
+      --line: #d1d5db;
+      --success: #0f766e;
+      --error: #b91c1c;
+      --focus: #2563eb;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      font-family: Inter, Arial, Helvetica, sans-serif;
+      background: var(--bg);
+      color: var(--ink);
+      line-height: 1.45;
+    }
+
+    .activity {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 24px;
+    }
+
+    .header {
+      background: linear-gradient(135deg, var(--obu-green), #0d6b3b);
+      color: white;
+      border-radius: 18px;
+      padding: 24px;
+      margin-bottom: 20px;
+      box-shadow: 0 12px 30px rgba(8, 74, 40, 0.18);
+    }
+
+    h1 {
+      margin: 0 0 8px;
+      font-size: clamp(1.6rem, 3vw, 2.2rem);
+    }
+
+    .header p { margin: 0; max-width: 850px; }
+
+    .instructions {
+      background: #fff7df;
+      border: 1px solid #f3d98b;
+      border-radius: 14px;
+      padding: 14px 16px;
+      margin-bottom: 18px;
+    }
+
+    .workspace {
+      display: grid;
+      grid-template-columns: minmax(280px, 0.9fr) minmax(360px, 1.4fr);
+      gap: 18px;
+      align-items: start;
+    }
+
+    .panel {
+      background: var(--card);
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      padding: 18px;
+      box-shadow: 0 6px 18px rgba(15, 23, 42, 0.06);
+    }
+
+    .panel h2 {
+      margin: 0 0 12px;
+      font-size: 1.2rem;
+      color: var(--obu-green);
+    }
+
+    .label-bank {
+      display: grid;
+      gap: 10px;
+    }
+
+    .term {
+      border: 2px solid var(--obu-green);
+      background: white;
+      color: var(--obu-green);
+      border-radius: 999px;
+      padding: 10px 12px;
+      font-weight: 700;
+      cursor: grab;
+      text-align: center;
+      user-select: none;
+      transition: transform 0.12s ease, background 0.12s ease, box-shadow 0.12s ease;
+    }
+
+    .term:focus-visible,
+    .drop-zone:focus-visible,
+    button:focus-visible {
+      outline: 3px solid var(--focus);
+      outline-offset: 3px;
+    }
+
+    .term.dragging {
+      opacity: 0.55;
+      transform: scale(0.98);
+    }
+
+    .term.used {
+      display: none;
+    }
+
+    .diagram-wrap {
+      display: grid;
+      gap: 16px;
+    }
+
+    .ear-diagram {
+      background: #ffffff;
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      padding: 16px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    svg {
+      width: 100%;
+      height: auto;
+      display: block;
+    }
+
+    .section-label {
+      font-size: 14px;
+      font-weight: 800;
+      fill: #374151;
+    }
+
+    .drop-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 12px;
+    }
+
+    .drop-zone {
+      min-height: 64px;
+      border: 2px dashed #9ca3af;
+      border-radius: 14px;
+      padding: 10px;
+      background: #f9fafb;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      gap: 4px;
+      transition: background 0.12s ease, border-color 0.12s ease;
+    }
+
+    .drop-zone.over {
+      background: #ecfdf5;
+      border-color: var(--obu-green);
+    }
+
+    .drop-zone .target-title {
+      font-size: 0.82rem;
+      font-weight: 800;
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: 0.03em;
+    }
+
+    .drop-zone .answer {
+      font-weight: 800;
+      color: var(--ink);
+      min-height: 24px;
+    }
+
+    .drop-zone.correct {
+      background: #ecfdf5;
+      border-color: var(--success);
+    }
+
+    .drop-zone.incorrect {
+      background: #fef2f2;
+      border-color: var(--error);
+    }
+
+    .buttons {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 16px;
+    }
+
+    button {
+      border: 0;
+      border-radius: 999px;
+      padding: 10px 16px;
+      font-weight: 800;
+      cursor: pointer;
+    }
+
+    .primary { background: var(--obu-green); color: white; }
+    .secondary { background: #e5e7eb; color: var(--ink); }
+
+    .feedback {
+      margin-top: 14px;
+      padding: 14px;
+      border-radius: 14px;
+      background: #eef2ff;
+      border: 1px solid #c7d2fe;
+      font-weight: 700;
+      min-height: 52px;
+    }
+
+    .sr-only {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      padding: 0;
+      margin: -1px;
+      overflow: hidden;
+      clip: rect(0, 0, 0, 0);
+      white-space: nowrap;
+      border: 0;
+    }
+
+    @media (max-width: 850px) {
+      .workspace { grid-template-columns: 1fr; }
+      .drop-grid { grid-template-columns: 1fr; }
+      .activity { padding: 14px; }
+    }
+  </style>
+</head>
+<body>
+  <main class="activity">
+    <section class="header">
+      <h1>Auditory System Anatomy: Drag-and-Drop Review</h1>
+      <p>Match each anatomical structure to its location or function in the auditory system. Use this as a quick knowledge check before moving into hearing physiology and clinical application.</p>
+    </section>
+
+    <section class="instructions" aria-label="Instructions">
+      <strong>Directions:</strong> Drag each term into the correct box. On a keyboard or touch device, tap a term first, then tap the box where it belongs. Select <strong>Check Answers</strong> when finished.
+    </section>
+
+    <section class="workspace">
+      <aside class="panel" aria-labelledby="bank-heading">
+        <h2 id="bank-heading">Terms</h2>
+        <div id="labelBank" class="label-bank" aria-label="Draggable terms"></div>
+      </aside>
+
+      <section class="panel diagram-wrap" aria-labelledby="activity-heading">
+        <h2 id="activity-heading">Place the Labels</h2>
+
+        <div class="ear-diagram" aria-label="Simplified auditory system diagram">
+          <svg viewBox="0 0 900 360" role="img" aria-labelledby="svgTitle svgDesc">
+            <title id="svgTitle">Simplified auditory system diagram</title>
+            <desc id="svgDesc">A simplified left-to-right diagram showing outer ear, middle ear, inner ear, and auditory nerve pathway.</desc>
+            <rect x="25" y="40" width="185" height="280" rx="24" fill="#fef3c7" stroke="#f59e0b" stroke-width="3"/>
+            <text x="70" y="72" class="section-label">Outer Ear</text>
+            <path d="M90 135 C45 105, 45 250, 95 225 C128 207, 125 158, 90 135 Z" fill="#f3c4a5" stroke="#92400e" stroke-width="3"/>
+            <path d="M110 180 C150 178, 180 180, 220 180" fill="none" stroke="#92400e" stroke-width="12" stroke-linecap="round"/>
+
+            <rect x="220" y="40" width="225" height="280" rx="24" fill="#e0f2fe" stroke="#0284c7" stroke-width="3"/>
+            <text x="285" y="72" class="section-label">Middle Ear</text>
+            <line x1="235" y1="120" x2="235" y2="250" stroke="#0f172a" stroke-width="6"/>
+            <circle cx="285" cy="180" r="20" fill="#bfdbfe" stroke="#1d4ed8" stroke-width="3"/>
+            <circle cx="335" cy="180" r="16" fill="#bfdbfe" stroke="#1d4ed8" stroke-width="3"/>
+            <circle cx="380" cy="180" r="12" fill="#bfdbfe" stroke="#1d4ed8" stroke-width="3"/>
+            <line x1="305" y1="180" x2="319" y2="180" stroke="#1d4ed8" stroke-width="5"/>
+            <line x1="351" y1="180" x2="368" y2="180" stroke="#1d4ed8" stroke-width="5"/>
+            <path d="M330 225 C335 265, 360 285, 405 305" fill="none" stroke="#0284c7" stroke-width="8" stroke-linecap="round"/>
+
+            <rect x="460" y="40" width="240" height="280" rx="24" fill="#dcfce7" stroke="#16a34a" stroke-width="3"/>
+            <text x="535" y="72" class="section-label">Inner Ear</text>
+            <path d="M545 190 C500 160, 530 105, 585 125 C640 145, 628 220, 570 225 C520 229, 505 182, 548 169" fill="none" stroke="#166534" stroke-width="14" stroke-linecap="round"/>
+            <path d="M615 130 C660 92, 690 135, 650 170" fill="none" stroke="#166534" stroke-width="10" stroke-linecap="round"/>
+            <path d="M655 175 C700 205, 665 250, 620 212" fill="none" stroke="#166534" stroke-width="10" stroke-linecap="round"/>
+            <ellipse cx="472" cy="180" rx="18" ry="30" fill="#bbf7d0" stroke="#166534" stroke-width="4"/>
+
+            <rect x="715" y="40" width="160" height="280" rx="24" fill="#ede9fe" stroke="#7c3aed" stroke-width="3"/>
+            <text x="747" y="72" class="section-label">Neural</text>
+            <path d="M675 180 C720 178, 750 183, 785 205 C820 225, 845 235, 870 220" fill="none" stroke="#6d28d9" stroke-width="12" stroke-linecap="round"/>
+          </svg>
+        </div>
+
+        <div id="dropGrid" class="drop-grid"></div>
+
+        <div class="buttons">
+          <button class="primary" type="button" onclick="checkAnswers()">Check Answers</button>
+          <button class="secondary" type="button" onclick="resetActivity()">Reset</button>
+          <button class="secondary" type="button" onclick="showAnswers()">Show Answers</button>
+        </div>
+
+        <div id="feedback" class="feedback" aria-live="polite">Place all labels, then check your answers.</div>
+      </section>
+    </section>
+  </main>
+
+  <script>
+    const items = [
+      { id: 'auricle', term: 'Auricle / Pinna', target: 'Collects sound waves and funnels them into the ear canal.' },
+      { id: 'canal', term: 'External Auditory Canal', target: 'Directs sound toward the tympanic membrane.' },
+      { id: 'tympanic', term: 'Tympanic Membrane', target: 'Vibrates in response to sound pressure waves.' },
+      { id: 'ossicles', term: 'Ossicles', target: 'Malleus, incus, and stapes transmit and amplify vibration.' },
+      { id: 'eustachian', term: 'Eustachian Tube', target: 'Equalizes air pressure between the middle ear and nasopharynx.' },
+      { id: 'cochlea', term: 'Cochlea', target: 'Converts mechanical vibration into neural signals for hearing.' },
+      { id: 'semicircular', term: 'Semicircular Canals', target: 'Support balance by detecting rotational head movement.' },
+      { id: 'auditoryNerve', term: 'Auditory / Vestibulocochlear Nerve', target: 'Carries auditory information from the inner ear to the brain.' }
+    ];
+
+    let selectedTermId = null;
+
+    function shuffle(array) {
+      return [...array].sort(() => Math.random() - 0.5);
+    }
+
+    function renderActivity() {
+      const bank = document.getElementById('labelBank');
+      const grid = document.getElementById('dropGrid');
+      bank.innerHTML = '';
+      grid.innerHTML = '';
+      selectedTermId = null;
+
+      shuffle(items).forEach(item => {
+        const term = document.createElement('button');
+        term.className = 'term';
+        term.id = `term-${item.id}`;
+        term.type = 'button';
+        term.textContent = item.term;
+        term.draggable = true;
+        term.dataset.id = item.id;
+        term.addEventListener('dragstart', handleDragStart);
+        term.addEventListener('dragend', handleDragEnd);
+        term.addEventListener('click', () => selectTerm(item.id));
+        bank.appendChild(term);
+      });
+
+      items.forEach((item, index) => {
+        const zone = document.createElement('div');
+        zone.className = 'drop-zone';
+        zone.tabIndex = 0;
+        zone.dataset.correct = item.id;
+        zone.dataset.current = '';
+        zone.setAttribute('role', 'button');
+        zone.setAttribute('aria-label', `Drop zone ${index + 1}: ${item.target}`);
+        zone.innerHTML = `<div class="target-title">Location / Function ${index + 1}</div><div>${item.target}</div><div class="answer" aria-live="polite">Drop label here</div>`;
+        zone.addEventListener('dragover', handleDragOver);
+        zone.addEventListener('dragleave', handleDragLeave);
+        zone.addEventListener('drop', handleDrop);
+        zone.addEventListener('click', () => placeSelectedTerm(zone));
+        zone.addEventListener('keydown', event => {
+          if (event.key === 'Enter' || event.key === ' ') {
+            event.preventDefault();
+            placeSelectedTerm(zone);
+          }
+        });
+        grid.appendChild(zone);
+      });
+    }
+
+    function handleDragStart(event) {
+      event.dataTransfer.setData('text/plain', event.target.dataset.id);
+      event.target.classList.add('dragging');
+    }
+
+    function handleDragEnd(event) {
+      event.target.classList.remove('dragging');
+    }
+
+    function handleDragOver(event) {
+      event.preventDefault();
+      event.currentTarget.classList.add('over');
+    }
+
+    function handleDragLeave(event) {
+      event.currentTarget.classList.remove('over');
+    }
+
+    function handleDrop(event) {
+      event.preventDefault();
+      const id = event.dataTransfer.getData('text/plain');
+      event.currentTarget.classList.remove('over');
+      placeTerm(id, event.currentTarget);
+    }
+
+    function selectTerm(id) {
+      selectedTermId = id;
+      document.querySelectorAll('.term').forEach(el => el.style.boxShadow = 'none');
+      const selected = document.getElementById(`term-${id}`);
+      selected.style.boxShadow = '0 0 0 4px rgba(242, 193, 78, 0.65)';
+      document.getElementById('feedback').textContent = `${selected.textContent} selected. Now choose the matching box.`;
+    }
+
+    function placeSelectedTerm(zone) {
+      if (!selectedTermId) {
+        document.getElementById('feedback').textContent = 'Select a label first, then choose a box.';
+        return;
+      }
+      placeTerm(selectedTermId, zone);
+      selectedTermId = null;
+    }
+
+    function placeTerm(id, zone) {
+      const item = items.find(i => i.id === id);
+      if (!item) return;
+
+      // If this term was already placed elsewhere, clear the old zone.
+      document.querySelectorAll('.drop-zone').forEach(z => {
+        if (z.dataset.current === id) {
+          z.dataset.current = '';
+          z.querySelector('.answer').textContent = 'Drop label here';
+          z.classList.remove('correct', 'incorrect');
+        }
+      });
+
+      // If another term is currently in this zone, return it to the bank.
+      const previousId = zone.dataset.current;
+      if (previousId) {
+        const previousTerm = document.getElementById(`term-${previousId}`);
+        if (previousTerm) previousTerm.classList.remove('used');
+      }
+
+      zone.dataset.current = id;
+      zone.querySelector('.answer').textContent = item.term;
+      zone.classList.remove('correct', 'incorrect');
+
+      const termButton = document.getElementById(`term-${id}`);
+      termButton.classList.add('used');
+      termButton.style.boxShadow = 'none';
+      document.getElementById('feedback').textContent = `${item.term} placed.`;
+    }
+
+    function checkAnswers() {
+      let correct = 0;
+      let answered = 0;
+      document.querySelectorAll('.drop-zone').forEach(zone => {
+        zone.classList.remove('correct', 'incorrect');
+        if (zone.dataset.current) answered++;
+        if (zone.dataset.current === zone.dataset.correct) {
+          correct++;
+          zone.classList.add('correct');
+        } else {
+          zone.classList.add('incorrect');
+        }
+      });
+
+      const feedback = document.getElementById('feedback');
+      if (answered < items.length) {
+        feedback.textContent = `You placed ${answered} of ${items.length} labels. Complete all labels, then check again. Current score: ${correct}/${items.length}.`;
+      } else if (correct === items.length) {
+        feedback.textContent = `Excellent. You matched all ${items.length} structures correctly.`;
+      } else {
+        feedback.textContent = `You matched ${correct}/${items.length} correctly. Review the red boxes and try again.`;
+      }
+    }
+
+    function resetActivity() {
+      renderActivity();
+      document.getElementById('feedback').textContent = 'Activity reset. Place all labels, then check your answers.';
+    }
+
+    function showAnswers() {
+      document.querySelectorAll('.drop-zone').forEach(zone => {
+        const id = zone.dataset.correct;
+        const item = items.find(i => i.id === id);
+        zone.dataset.current = id;
+        zone.querySelector('.answer').textContent = item.term;
+        zone.classList.remove('incorrect');
+        zone.classList.add('correct');
+      });
+      document.querySelectorAll('.term').forEach(term => term.classList.add('used'));
+      document.getElementById('feedback').textContent = 'Correct answers are shown. Select Reset to practice again.';
+    }
+
+    renderActivity();
+  </script>
+</body>
+</html>
