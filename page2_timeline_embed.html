@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Clinical Education Timeline</title>
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: 'Nunito', sans-serif; background: #f9f9f9; padding: 16px; color: #222; }
+  .semester-block { background: #ffffff; border: 1px solid #e0e0e0; border-radius: 12px; margin-bottom: 12px; overflow: hidden; }
+  .semester-header { display: flex; align-items: center; gap: 12px; padding: 1rem 1.25rem; cursor: pointer; user-select: none; }
+  .semester-header:hover { background: #f5faf5; }
+  .badge { background: #295b30; color: #fff; font-size: 13px; font-weight: 800; border-radius: 8px; padding: 4px 12px; white-space: nowrap; flex-shrink: 0; }
+  .sem-title { font-size: 17px; font-weight: 700; color: #222; flex: 1; }
+  .chevron { font-size: 20px; color: #295b30; transition: transform 0.25s; margin-left: 8px; flex-shrink: 0; }
+  .chevron.open { transform: rotate(180deg); }
+  .semester-body { display: none; border-top: 1px solid #eeeeee; padding: 1.1rem 1.25rem 1.25rem; background: #f9fdf9; }
+  .semester-body.open { display: block; }
+  .exp-row { display: flex; align-items: flex-start; gap: 12px; margin-bottom: 14px; }
+  .exp-row:last-child { margin-bottom: 0; }
+  .exp-icon { width: 38px; height: 38px; border-radius: 8px; background: #295b30; display: flex; align-items: center; justify-content: center; font-size: 20px; flex-shrink: 0; margin-top: 2px; }
+  .exp-title { font-size: 16px; font-weight: 800; color: #295b30; margin-bottom: 4px; }
+  .exp-desc { font-size: 15px; color: #444; line-height: 1.65; }
+  .ocr-tag { display: inline-block; background: #c48b2b; color: #fff; font-size: 11px; font-weight: 800; border-radius: 6px; padding: 2px 8px; margin-left: 8px; vertical-align: middle; }
+  .hint { font-size: 13px; color: #888; text-align: center; margin-bottom: 12px; font-style: italic; }
+</style>
+</head>
+<body>
+
+<p class="hint">Click each semester to expand</p>
+
+<!-- SEMESTER 1 -->
+<div class="semester-block">
+  <div class="semester-header" onclick="toggle('s1')">
+    <div class="badge">Semester 1</div>
+    <div class="sem-title">Fall &nbsp;·&nbsp; Building Your Foundation</div>
+    <div class="chevron" id="chevron-s1">&#8964;</div>
+  </div>
+  <div class="semester-body" id="s1">
+    <div class="exp-row">
+      <div class="exp-icon">🏫</div>
+      <div>
+        <div class="exp-title">On-Campus Residency: Education/Pediatric <span class="ocr-tag">OCR 1</span></div>
+        <div class="exp-desc">Your first immersive clinical experience happens right here on the OBU campus. Over five intensive days, you'll follow a single pediatric client case from referral through IEP development, practicing real clinical skills in a supported environment alongside your cohort and faculty.</div>
+      </div>
+    </div>
+    <div class="exp-row">
+      <div class="exp-icon">💻</div>
+      <div>
+        <div class="exp-title">Virtual Practicum (SLP 5212)</div>
+        <div class="exp-desc">Running alongside your coursework for the full semester, the Virtual Practicum uses Simucase to give you supervised clinical hours before you enter an external placement. Hours completed here count toward your 375-hour requirement.</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- SEMESTER 2 -->
+<div class="semester-block">
+  <div class="semester-header" onclick="toggle('s2')">
+    <div class="badge">Semester 2</div>
+    <div class="sem-title">Spring &nbsp;·&nbsp; Entering the School Setting</div>
+    <div class="chevron" id="chevron-s2">&#8964;</div>
+  </div>
+  <div class="semester-body" id="s2">
+    <div class="exp-row">
+      <div class="exp-icon">🎒</div>
+      <div>
+        <div class="exp-title">Education/Pediatric Externship (SLP 6002)</div>
+        <div class="exp-desc">Your first real-world externship places you in an educational setting — typically a school — where you'll work with children under the supervision of a qualified SLP clinical educator. You'll apply the skills from Semester 1 with real clients, real data, and real IEPs. This placement runs for the full semester, a minimum of three days per week.</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- SEMESTER 3 -->
+<div class="semester-block">
+  <div class="semester-header" onclick="toggle('s3')">
+    <div class="badge">Semester 3</div>
+    <div class="sem-title">Summer &nbsp;·&nbsp; Expanding Your Clinical Scope</div>
+    <div class="chevron" id="chevron-s3">&#8964;</div>
+  </div>
+  <div class="semester-body" id="s3">
+    <div class="exp-row">
+      <div class="exp-icon">🏥</div>
+      <div>
+        <div class="exp-title">On-Campus Residency: Medical/Adult <span class="ocr-tag">OCR 2</span></div>
+        <div class="exp-desc">Your second OCR brings you back to campus for another intensive week, this time focused on adult and medical populations — dysphagia, neurogenic disorders, voice, and more. You'll work through a new case with new faculty and peers, deepening your clinical reasoning across a different scope of practice.</div>
+      </div>
+    </div>
+    <div class="exp-row">
+      <div class="exp-icon">🩺</div>
+      <div>
+        <div class="exp-title">Medical/Adult Externship (SLP 6212)</div>
+        <div class="exp-desc">This externship places you in a medical or clinical setting — hospitals, rehabilitation centers, outpatient clinics, or skilled nursing facilities — where you'll work with adult populations under clinical supervision. This runs for the full semester at a minimum of three days per week.</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- SEMESTER 4 -->
+<div class="semester-block">
+  <div class="semester-header" onclick="toggle('s4')">
+    <div class="badge">Semester 4</div>
+    <div class="sem-title">Fall &nbsp;·&nbsp; Advanced Clinical Practice</div>
+    <div class="chevron" id="chevron-s4">&#8964;</div>
+  </div>
+  <div class="semester-body" id="s4">
+    <div class="exp-row">
+      <div class="exp-icon">⭐</div>
+      <div>
+        <div class="exp-title">Advanced Clinical Externship (SLP 6402)</div>
+        <div class="exp-desc">Your final externship is an advanced placement — often a telepractice setting or specialized clinical context — where you'll bring together everything you've learned. By this point you're functioning with greater independence and demonstrating readiness for entry-level professional practice. This is the capstone of your clinical education.</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  function toggle(id) {
+    var body = document.getElementById(id);
+    var chevron = document.getElementById('chevron-' + id);
+    body.classList.toggle('open');
+    chevron.classList.toggle('open');
+  }
+</script>
+</body>
+</html>
