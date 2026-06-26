@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>What Would You Do? — Clinical Ethics Scenarios</title>
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: 'Nunito', sans-serif; background: #f9f9f9; padding: 20px; color: #222; }
+  h2 { font-size: 20px; font-weight: 800; color: #295b30; margin-bottom: 6px; }
+  .subtitle { font-size: 15px; color: #666; margin-bottom: 20px; line-height: 1.5; }
+  .scenario { background: #fff; border: 1px solid #e0e0e0; border-radius: 12px; padding: 1.25rem 1.4rem; margin-bottom: 16px; }
+  .scenario-num { font-size: 11px; font-weight: 800; color: #c48b2b; letter-spacing: 0.08em; text-transform: uppercase; margin-bottom: 6px; }
+  .scenario-text { font-size: 16px; color: #333; line-height: 1.65; margin-bottom: 14px; }
+  .options { display: flex; flex-direction: column; gap: 8px; }
+  .option-btn { background: #f5f5f5; border: 1.5px solid #e0e0e0; border-radius: 8px; padding: 0.7rem 1rem; font-size: 15px; font-family: 'Nunito', sans-serif; color: #333; text-align: left; cursor: pointer; transition: background 0.15s, border-color 0.15s; }
+  .option-btn:hover { background: #f0f7f0; border-color: #295b30; }
+  .option-btn.correct { background: #e8f5e9; border-color: #295b30; color: #295b30; font-weight: 700; }
+  .option-btn.incorrect { background: #fdecea; border-color: #cc0000; color: #cc0000; }
+  .option-btn:disabled { cursor: default; }
+  .feedback { display: none; margin-top: 12px; padding: 0.85rem 1rem; border-radius: 8px; font-size: 15px; line-height: 1.6; }
+  .feedback.correct { background: #e8f5e9; border: 1px solid #295b30; color: #295b30; display: block; }
+  .feedback.incorrect { background: #fdecea; border: 1px solid #cc0000; color: #880000; display: block; }
+  .progress-bar-wrap { background: #eeeeee; border-radius: 8px; height: 8px; margin-bottom: 20px; overflow: hidden; }
+  .progress-bar { background: #295b30; height: 8px; border-radius: 8px; width: 0%; transition: width 0.4s; }
+  .progress-label { font-size: 13px; color: #666; margin-bottom: 6px; }
+  .results { display: none; background: #295b30; border-radius: 12px; padding: 1.5rem; text-align: center; margin-top: 8px; }
+  .results-title { font-size: 22px; font-weight: 800; color: #fff; margin-bottom: 8px; }
+  .results-score { font-size: 40px; font-weight: 800; color: #c48b2b; margin-bottom: 8px; }
+  .results-msg { font-size: 16px; color: rgba(255,255,255,0.85); line-height: 1.6; margin-bottom: 16px; }
+  .retry-btn { background: #c48b2b; border: none; border-radius: 8px; padding: 0.7rem 1.6rem; font-size: 16px; font-weight: 700; font-family: 'Nunito', sans-serif; color: #fff; cursor: pointer; }
+  .retry-btn:hover { background: #a87424; }
+</style>
+</head>
+<body>
+
+<h2>What Would You Do?</h2>
+<p class="subtitle">Read each scenario and choose the best response. These situations reflect real challenges student clinicians encounter — there are no trick questions, just important professional decisions.</p>
+
+<div class="progress-label" id="progress-label">Question 1 of 5</div>
+<div class="progress-bar-wrap"><div class="progress-bar" id="progress-bar"></div></div>
+
+<!-- SCENARIO 1 -->
+<div class="scenario" id="scenario-1">
+  <div class="scenario-num">Scenario 1</div>
+  <div class="scenario-text">After a great session with a child client, the child's mother asks to take a photo with you to post on her Facebook page to thank you. She says she has already gotten permission from the site. What do you do?</div>
+  <div class="options">
+    <button class="option-btn" onclick="answer(1, this, false)">Agree — the parent gave permission and it's a kind gesture.</button>
+    <button class="option-btn" onclick="answer(1, this, false)">Ask your clinical educator first, then agree if they say it's okay.</button>
+    <button class="option-btn" onclick="answer(1, this, true)">Politely decline the photo. You may choose whether to participate, but you are never permitted to post or share photos with persons served on social media.</button>
+    <button class="option-btn" onclick="answer(1, this, false)">Agree to the photo but ask her not to tag you.</button>
+  </div>
+  <div class="feedback" id="feedback-1"></div>
+</div>
+
+<!-- SCENARIO 2 -->
+<div class="scenario" id="scenario-2">
+  <div class="scenario-num">Scenario 2</div>
+  <div class="scenario-text">You are frustrated after a difficult day at your externship site and vent to a fellow student in a private text message, mentioning the client's first name and describing the session. Is this okay?</div>
+  <div class="options">
+    <button class="option-btn" onclick="answer(2, this, false)">Yes — it's a private message to another student in the program who also understands confidentiality.</button>
+    <button class="option-btn" onclick="answer(2, this, false)">Yes — as long as you delete the messages afterward.</button>
+    <button class="option-btn" onclick="answer(2, this, true)">No — sharing identifying client information outside the clinical setting in any form, including private messages, is a violation of confidentiality.</button>
+    <button class="option-btn" onclick="answer(2, this, false)">It depends on whether the client has signed a release of information.</button>
+  </div>
+  <div class="feedback" id="feedback-2"></div>
+</div>
+
+<!-- SCENARIO 3 -->
+<div class="scenario" id="scenario-3">
+  <div class="scenario-num">Scenario 3</div>
+  <div class="scenario-text">You know a great SLP at a local hospital and you think it would be a perfect externship site for you. You reach out to her informally to ask if she would be willing to supervise you. What should you have done instead?</div>
+  <div class="options">
+    <button class="option-btn" onclick="answer(3, this, false)">Nothing wrong here — personal connections are how networking works in the profession.</button>
+    <button class="option-btn" onclick="answer(3, this, false)">Asked your faculty advisor first before reaching out.</button>
+    <button class="option-btn" onclick="answer(3, this, true)">Submitted a site preference through Exxat by the first week of the semester prior to placement and let the Director of Clinical Education handle all site contact. Students are never permitted to contact sites directly to arrange placements.</button>
+    <button class="option-btn" onclick="answer(3, this, false)">Emailed the Director of Clinical Education asking her to contact your SLP friend.</button>
+  </div>
+  <div class="feedback" id="feedback-3"></div>
+</div>
+
+<!-- SCENARIO 4 -->
+<div class="scenario" id="scenario-4">
+  <div class="scenario-num">Scenario 4</div>
+  <div class="scenario-text">You arrive at your externship site and something about the environment makes you feel genuinely unsafe. Your clinical educator is not on site today. What do you do?</div>
+  <div class="options">
+    <button class="option-btn" onclick="answer(4, this, false)">Stay and complete the session — leaving would affect your clinical hours.</button>
+    <button class="option-btn" onclick="answer(4, this, false)">Call your faculty clinical educator and wait for their response before deciding.</button>
+    <button class="option-btn" onclick="answer(4, this, false)">Try to find another staff member at the site to address the concern before leaving.</button>
+    <button class="option-btn" onclick="answer(4, this, true)">Leave the site immediately — you are always permitted to leave if you feel unsafe, with no academic penalty. Report the incident in writing to the Director of Clinical Education within 24 hours.</button>
+  </div>
+  <div class="feedback" id="feedback-4"></div>
+</div>
+
+<!-- SCENARIO 5 -->
+<div class="scenario" id="scenario-5">
+  <div class="scenario-num">Scenario 5</div>
+  <div class="scenario-text">Your clinical educator asks you to record a therapy session on your personal phone so you can review it together for feedback. What do you do?</div>
+  <div class="options">
+    <button class="option-btn" onclick="answer(5, this, false)">Record the session — your clinical educator gave permission.</button>
+    <button class="option-btn" onclick="answer(5, this, false)">Record it but immediately delete it after the feedback session.</button>
+    <button class="option-btn" onclick="answer(5, this, true)">Politely explain that OBU program policy does not permit students to create recordings of persons served on personal devices. If a recording is needed, the clinical educator must create and manage it according to site policies.</button>
+    <button class="option-btn" onclick="answer(5, this, false)">Ask the client's permission first, then record if they agree.</button>
+  </div>
+  <div class="feedback" id="feedback-5"></div>
+</div>
+
+<!-- RESULTS -->
+<div class="results" id="results">
+  <div class="results-title">Quiz Complete!</div>
+  <div class="results-score" id="results-score"></div>
+  <div class="results-msg" id="results-msg"></div>
+  <button class="retry-btn" onclick="resetQuiz()">Try Again</button>
+</div>
+
+<script>
+  var answers = 0;
+  var correct = 0;
+  var total = 5;
+
+  var feedbackText = {
+    1: { correct: "✓ Correct! A parent appearing in a photo with a student is at the student's discretion — but students are never permitted to post or share photos with persons served on social media. Politely declining is always the safest and most professional choice.", incorrect: "Not quite. Even with parent permission, students are never permitted to post photos with persons served. The safest and most professional response is to politely decline." },
+    2: { correct: "✓ Correct! Client confidentiality applies in all settings and all communication channels — including private messages. Even sharing a first name with an identifying detail is a violation. If you need to debrief after a hard day, do so with your faculty clinical educator using your OBU email and without identifying information.", incorrect: "Not quite. Confidentiality applies everywhere — including private text messages between students. Any identifying information about a client shared outside the clinical setting is a violation, regardless of who receives it." },
+    3: { correct: "✓ Correct! Students are never permitted to contact external clinical sites to arrange their own placements. The right move is to submit your preference through Exxat and let the Director of Clinical Education handle all site communication.", incorrect: "Not quite. Students are not permitted to contact external sites directly for any reason related to placement arrangements. All coordination goes through the Director of Clinical Education. Submit site preferences through Exxat." },
+    4: { correct: "✓ Correct! Your safety is always the priority. You are permitted to leave any site immediately if you feel unsafe — no academic penalty applies. The only requirement is that you report the incident in writing to the Director of Clinical Education within 24 hours.", incorrect: "Not quite. You are always permitted — and expected — to leave a site if you perceive a safety threat, with no academic penalty. Report the incident to the Director of Clinical Education in writing within 24 hours." },
+    5: { correct: "✓ Correct! Students are never permitted to create or store recordings of persons served on personal devices, regardless of who asks. If a recording is needed for clinical education purposes, the clinical educator at the site must create and manage it according to site policies.", incorrect: "Not quite. OBU policy does not allow students to create recordings of persons served on personal devices under any circumstances. Politely explain this to your clinical educator and let them know that per program policy, any recording must be created and managed by them." }
+  };
+
+  function answer(scenarioNum, btn, isCorrect) {
+    var btns = document.getElementById('scenario-' + scenarioNum).querySelectorAll('.option-btn');
+    btns.forEach(function(b) { b.disabled = true; });
+
+    var feedback = document.getElementById('feedback-' + scenarioNum);
+    if (isCorrect) {
+      btn.classList.add('correct');
+      feedback.className = 'feedback correct';
+      feedback.textContent = feedbackText[scenarioNum].correct;
+      correct++;
+    } else {
+      btn.classList.add('incorrect');
+      feedback.className = 'feedback incorrect';
+      feedback.textContent = feedbackText[scenarioNum].incorrect;
+      btns.forEach(function(b) {
+        if (b.onclick.toString().includes('true')) { b.classList.add('correct'); }
+      });
+    }
+
+    answers++;
+    updateProgress();
+
+    if (answers === total) {
+      setTimeout(showResults, 800);
+    }
+  }
+
+  function updateProgress() {
+    var pct = (answers / total) * 100;
+    document.getElementById('progress-bar').style.width = pct + '%';
+    document.getElementById('progress-label').textContent = answers < total ? 'Question ' + (answers + 1) + ' of ' + total : 'All done!';
+  }
+
+  function showResults() {
+    var results = document.getElementById('results');
+    results.style.display = 'block';
+    document.getElementById('results-score').textContent = correct + ' / ' + total;
+    var msg = '';
+    if (correct === 5) { msg = 'Perfect score! You have a strong grasp of the ethical and policy standards that will guide your clinical practice. Your clients and your career are in good hands.'; }
+    else if (correct >= 3) { msg = 'Good work! Review any scenarios you missed and revisit the relevant sections on this page. These situations come up in real clinical settings — the more confident you are now, the better.'; }
+    else { msg = 'Take some time to review the policies on this page and try again. These standards are fundamental to your clinical practice and your professional identity as an SLP.'; }
+    document.getElementById('results-msg').textContent = msg;
+    results.scrollIntoView({ behavior: 'smooth' });
+  }
+
+  function resetQuiz() {
+    answers = 0; correct = 0;
+    document.getElementById('progress-bar').style.width = '0%';
+    document.getElementById('progress-label').textContent = 'Question 1 of 5';
+    document.getElementById('results').style.display = 'none';
+    for (var i = 1; i <= total; i++) {
+      var btns = document.getElementById('scenario-' + i).querySelectorAll('.option-btn');
+      btns.forEach(function(b) {
+        b.disabled = false;
+        b.classList.remove('correct', 'incorrect');
+      });
+      var fb = document.getElementById('feedback-' + i);
+      fb.className = 'feedback';
+      fb.textContent = '';
+    }
+  }
+</script>
+</body>
+</html>
